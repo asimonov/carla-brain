@@ -179,7 +179,7 @@ class WaypointUpdater(object):
         lane.header.seq = self.seq
         lane.waypoints = waypoints
 
-        rospy.logwarn("updater: publish {} waypoints".format(self.next_traffic_wp))
+        #rospy.logwarn("updater: publish {} waypoints".format(len(waypoints)))
 
         self.final_waypoints_pub.publish(lane)
         self.seq += 1
