@@ -5,6 +5,8 @@ import rospy
 from geometry_msgs.msg import PoseStamped
 from styx_msgs.msg import Lane, Waypoint
 from waypoint_helper import is_waypoint_behind_pose
+from std_msgs.msg import Int32
+
 
 '''
 This node will publish waypoints from the car's current position to some `x` distance ahead.
@@ -21,8 +23,8 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number via parameter
-PUBLISHER_RATE = 1  # Publishin rate on channel /final_waypoints
+LOOKAHEAD_WPS = 100 # Number of waypoints we will publish. It comes from launchfile parameter
+PUBLISHER_RATE = 5  # Publishing rate on channel /final_waypoints. Hz
 
 dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
 
@@ -33,10 +35,11 @@ class WaypointUpdater(object):
 
         LOOKAHEAD_WPS = rospy.get_param('lookahead_wps', LOOKAHEAD_WPS)
 
-        rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
-        rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
+        rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb, queue_size=1)
+        rospy.Subscriber('/base_waypoints', Lane, self.base_waypoints_cb, queue_size=1)
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
+        rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb, queue_size=1)
 
         self.final_waypoints_pub = rospy.Publisher('/final_waypoints', Lane, queue_size=1)
 
@@ -46,6 +49,7 @@ class WaypointUpdater(object):
         self.len_base_waypoints = 0
         self.seq = 0
         self.current_waypoint_ahead = None
+        self.next_traffic_wp = -1
         
         rate = rospy.Rate(PUBLISHER_RATE)
         while not rospy.is_shutdown():
@@ -59,13 +63,13 @@ class WaypointUpdater(object):
         if self.base_waypoints is None:
             return
         
-    def waypoints_cb(self, waypoints):
+    def base_waypoints_cb(self, waypoints):
         self.base_waypoints = waypoints.waypoints
         self.len_base_waypoints = len(self.base_waypoints)
 
     def traffic_cb(self, msg):
-        # TODO: Callback for /traffic_waypoint message. Implement
-        pass
+        self.next_traffic_wp = msg.data
+        rospy.logwarn("updater: next TL wp = {}".format(self.next_traffic_wp))
 
     def obstacle_cb(self, msg):
         # TODO: Callback for /obstacle_waypoint message. We will implement it later
@@ -161,15 +165,38 @@ class WaypointUpdater(object):
         self.current_waypoint_ahead = start_index
 
         waypoint_indices = self._get_waypoint_indices(start_index, LOOKAHEAD_WPS)
-        
+        waypoints = []
+        for i in waypoint_indices:
+            waypoints.append(self.base_waypoints[i])
+            if i==self.next_traffic_wp:
+                # red traffic light -- decelerate and stop
+                waypoints = self.decelerate(waypoints)
+                # continue adding subsequent waypoints with normal speed. or ramp up?
+
         lane = Lane()
         lane.header.frame_id = self.current_frame_id
         lane.header.stamp = rospy.Time.now()
         lane.header.seq = self.seq
-        lane.waypoints = [self.base_waypoints[i] for i in waypoint_indices]
+        lane.waypoints = waypoints
+
+        rospy.logwarn("updater: publish {} waypoints".format(self.next_traffic_wp))
 
         self.final_waypoints_pub.publish(lane)
         self.seq += 1
+
+    def decelerate(self, waypoints):
+        ''' decelerate gradually to last waypoint. taken from waypoint_loader.py '''
+        MAX_DECEL = 1.0
+        last = waypoints[-1]
+        last.twist.twist.linear.x = 0.
+        for wp in waypoints[:-1][::-1]:
+            dist = dl(wp.pose.pose.position, last.pose.pose.position)
+            vel = math.sqrt(2 * MAX_DECEL * dist)
+            if vel < 1.:
+                vel = 0.
+            wp.twist.twist.linear.x = min(vel, wp.twist.twist.linear.x)
+        return waypoints
+
 
 if __name__ == '__main__':
     try:
