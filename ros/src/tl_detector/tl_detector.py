@@ -73,7 +73,7 @@ class TLDetector(object):
         self.config = yaml.load(config_string)
 
         self.bridge = CvBridge()
-        self.light_classifier = TLClassifier()
+        self.light_classifier = TLClassifier(self.detector.get_session())
         self.listener = tf.TransformListener()
 
         self.state = TrafficLight.UNKNOWN
@@ -202,7 +202,7 @@ class TLDetector(object):
             x2 = box[1][0]
             y2 = box[1][1]
             tl_image = cv_image[y1:y2, x1:x2]
-            classifier_size = (128,128)
+            classifier_size = (32,32)
             resized = cv2.resize(tl_image, classifier_size, cv2.INTER_LINEAR)
             # Classification
             tl_class = self.light_classifier.get_classification(resized)
