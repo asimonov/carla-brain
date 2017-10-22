@@ -51,20 +51,21 @@ class TLClassifier(object):
         ops = [self._classifier_softmax, self._classifier_output]
         feed_dict = {self._classifier_input: [image],
                      self._classifier_keep_prob: 1.0}
-        predicted_probabilities, predicted_class = self._session.run(ops, feed_dict=feed_dict)
-        predicted_label = self._label_converter.convert_to_labels(predicted_class)
+        predicted_probabilities, predicted_classes = self._session.run(ops, feed_dict=feed_dict)
+        predicted_labels = self._label_converter.convert_to_labels(predicted_classes)
         tf_time_ms = int((timer() - start_time) * 1000)
 
+        label = predicted_labels[0]
         result = TrafficLight.UNKNOWN
-        if predicted_label=='red':
+        if label=='red':
             result = TrafficLight.RED
-        elif predicted_label=='yellow':
+        elif label=='yellow':
             result = TrafficLight.YELLOW
-        elif predicted_label=='green':
+        elif label=='green':
             result = TrafficLight.GREEN
 
         self.counter += 1
-        fname = 'img{}_{}.png'.format(self.counter, predicted_label)
+        fname = 'img{}_{}.png'.format(self.counter, label)
         cv2.imwrite(fname, image)
 
         return result
