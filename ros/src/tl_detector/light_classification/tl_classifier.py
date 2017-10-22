@@ -27,9 +27,9 @@ class TLClassifier(object):
         # image size
         self._image_shape = (32, 32)
         # run on fake image once
+        self.counter = 0
         fake_img = np.zeros(self._image_shape+(3,), dtype=np.uint8)
         self.get_classification(fake_img)
-        self.counter = 0
 
 
     def get_classification(self, image):
