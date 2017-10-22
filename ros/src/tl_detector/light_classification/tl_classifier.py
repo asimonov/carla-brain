@@ -29,6 +29,7 @@ class TLClassifier(object):
         # run on fake image once
         fake_img = np.zeros(self._image_shape+(3,), dtype=np.uint8)
         self.get_classification(fake_img)
+        self.counter = 0
 
 
     def get_classification(self, image):
@@ -60,6 +61,10 @@ class TLClassifier(object):
             result = TrafficLight.YELLOW
         elif predicted_label=='green':
             result = TrafficLight.GREEN
+
+        self.counter += 1
+        fname = 'img{}_{}.png'.format(self.counter, predicted_label)
+        cv2.imwrite(fname, image)
 
         return result
 
