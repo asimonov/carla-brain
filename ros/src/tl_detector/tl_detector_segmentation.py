@@ -31,6 +31,10 @@ class TLDetectorSegmentation(object):
         self.detect(fake_img)
 
 
+    def get_session(self):
+        return self._session
+
+
     def detect(self, img):
         """
         Detects images of traffic lights in the input image

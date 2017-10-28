@@ -38,7 +38,7 @@ class TLDetector(object):
 
         self.bridge = CvBridge()
         self.detector = TLDetectorSegmentation() # TLDetector that uses semantic segmentation
-        self.classifier = TLClassifier()
+        self.classifier = TLClassifier(self.detector.get_session())
 
         self.pose = None
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb, queue_size=1)
@@ -125,7 +125,7 @@ class TLDetector(object):
             x2 = box[1][0]
             y2 = box[1][1]
             tl_image = cv_image[y1:y2, x1:x2]
-            classifier_size = (128,128)
+            classifier_size = (32,32)
             resized = cv2.resize(tl_image, classifier_size, cv2.INTER_LINEAR)
             # Classification
             tl_class = self.classifier.get_classification(resized)
