@@ -32,12 +32,13 @@ dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
 
 class WaypointUpdater(object):
     def __init__(self):
-        global LOOKAHEAD_WPS
         rospy.init_node('waypoint_updater')
 
+        global LOOKAHEAD_WPS
         LOOKAHEAD_WPS = rospy.get_param('lookahead_wps', LOOKAHEAD_WPS)
         rospy.logwarn('wp_updater: LOOKAHEAD_WPS={}'.format(LOOKAHEAD_WPS))
 
+        global MAX_SPEED
         MAX_SPEED = rospy.get_param('velocity', MAX_SPEED)
         rospy.logwarn('wp_updater: MAX_SPEED={}'.format(MAX_SPEED))
 
