@@ -24,8 +24,8 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number via parameter
-PUBLISHER_RATE = 1  # Publishin rate on channel /final_waypoints
+LOOKAHEAD_WPS = 100 # Number of waypoints we will publish. You can change this number via parameter
+PUBLISHER_RATE = 5  # Publishin rate on channel /final_waypoints
 MAX_SPEED = 10 # replace with the configurable one
 
 dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
@@ -36,15 +36,17 @@ class WaypointUpdater(object):
         rospy.init_node('waypoint_updater')
 
         LOOKAHEAD_WPS = rospy.get_param('lookahead_wps', LOOKAHEAD_WPS)
+        rospy.logwarn('wp_updater: LOOKAHEAD_WPS={}'.format(LOOKAHEAD_WPS))
 
-        rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
-        rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
-        rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
-        rospy.Subscriber('/current_velocity', TwistStamped, self.velocity_cb)
+        MAX_SPEED = rospy.get_param('velocity', MAX_SPEED)
+        rospy.logwarn('wp_updater: MAX_SPEED={}'.format(MAX_SPEED))
+
+        rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb, queue_size=1)
+        rospy.Subscriber('/base_waypoints', Lane, self.base_waypoints_cb, queue_size=1)
+        rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb, queue_size=1)
+        rospy.Subscriber('/current_velocity', TwistStamped, self.velocity_cb, queue_size=1)
         # for testing: Gives the state of the traffic lights
-        rospy.Subscriber('/vehicle/traffic_lights',TrafficLightArray, self.tfl_state_cb)
-
-        # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
+        rospy.Subscriber('/vehicle/traffic_lights',TrafficLightArray, self.tfl_state_cb, queue_size=1)
 
         self.final_waypoints_pub = rospy.Publisher('/final_waypoints', Lane, queue_size=1)
 
@@ -72,7 +74,7 @@ class WaypointUpdater(object):
         if self.base_waypoints is None:
             return
 
-    def waypoints_cb(self, waypoints):
+    def base_waypoints_cb(self, waypoints):
         """
         Sets the callbacks in this object
         """
