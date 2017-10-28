@@ -37,6 +37,7 @@ that we have created in the `__init__` function.
 STEERING_EPSILON = 0.1
 THROTTLE_EPSILON = 0.05
 BRAKE_EPSILON = 0.05
+DBW_RATE = 50 # rate of publishing, Hz
 
 SUBSCRIBER_QUEUE_SIZE = 1
 
@@ -113,7 +114,7 @@ class DBWNode(object):
         self.loop()
 
     def loop(self):
-        rate = rospy.Rate(10)  # originally 50Hz
+        rate = rospy.Rate(DBW_RATE)
         while not rospy.is_shutdown():
 
             if self._valid_state():
