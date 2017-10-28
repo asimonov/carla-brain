@@ -255,7 +255,7 @@ class WaypointUpdater(object):
             full_speed = np.ones(7*LOOKAHEAD_WPS//8) * MAX_SPEED
             speeds = np.concatenate((speeds, full_speed))
 
-        rospy.logwarn(speeds)
+        rospy.logwarn('wp_updater: speeds={}'.format(speeds))
 
         for i in range(LOOKAHEAD_WPS):
             self.set_waypoint_velocity(lane.waypoints, i, speeds)
