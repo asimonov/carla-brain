@@ -63,7 +63,7 @@
 
 ## The car: Lincoln MKZ
 
-![Image-absolute](imgs/carla-cropped.jpg)
+![Image-absolute](pydata-presentation/imgs/carla-cropped.jpg)
 
 @fa[arrow-down]
 
@@ -73,7 +73,7 @@
 
 ### DBW Kit: Why?
 
-![Image-absolute](imgs/carla-control.png)
+![Image-absolute](pydata-presentation/imgs/carla-control.png)
 
 @fa[arrow-down]
 
@@ -84,8 +84,8 @@
 ### DBW Kit: [Dataspeed](http://docs.polysync.io/sensors/dataspeed-mkz-dbw)
 
 <a href="http://dataspeedinc.com/wp-content/uploads/2016/11/adas-kit.pdf">
-<img src="imgs/adas-kit-1.png" width="40%">
-<img src="imgs/adas-kit-2.png" width="40%">
+<img src="pydata-presentation/imgs/adas-kit-1.png" width="40%">
+<img src="pydata-presentation/imgs/adas-kit-2.png" width="40%">
 </a>
 
 @fa[arrow-down]
@@ -102,8 +102,8 @@
 - RADAR
 - others
 
-<img src="imgs/carla-lidar.png" width="30%">
-<img src="imgs/carla-camera.jpeg" width="30%">
+<img src="pydata-presentation/imgs/carla-lidar.png" width="30%">
+<img src="pydata-presentation/imgs/carla-camera.jpeg" width="30%">
 
 @fa[arrow-down]
 
@@ -126,7 +126,7 @@
 
 ## [www.streetdrone.com](http://www.streetdrone.com)
 
-![Image-absolute](imgs/streetdrone.png)
+![Image-absolute](pydata-presentation/imgs/streetdrone.png)
 
 
 
@@ -138,7 +138,7 @@
 
 ###### what do we need in SDC car S/W stack?
 
-<img src="imgs/carla-pipeline.png" width="85%">
+<img src="pydata-presentation/imgs/carla-pipeline.png" width="85%">
 
 @fa[arrow-down]
 
@@ -332,7 +332,7 @@ https://roscon.ros.org/2015/presentations/ROSCon-Automated-Driving.pdf
 
 ### ROS diagram for our car
 
-![Image-absolute](imgs/ros-diagram.png)
+![Image-absolute](pydata-presentation/imgs/ros-diagram.png)
 
 
 
@@ -344,7 +344,7 @@ https://roscon.ros.org/2015/presentations/ROSCon-Automated-Driving.pdf
 
 ##### Unity-based Simulator (provided by Udacity)
 
-![Image-absolute](imgs/simulator.png)
+![Image-absolute](pydata-presentation/imgs/simulator.png)
 
 @fa[arrow-down]
 
@@ -371,7 +371,7 @@ https://roscon.ros.org/2015/presentations/ROSCon-Automated-Driving.pdf
 
 ### Perception Module
 
-![Image-absolute](imgs/tl-detector.png)
+![Image-absolute](pydata-presentation/imgs/tl-detector.png)
 
 - close to traffic light waypoint?
 - get an image
@@ -460,7 +460,7 @@ https://roscon.ros.org/2015/presentations/ROSCon-Automated-Driving.pdf
 - Waypoint Loader
 - Waypoint Updater
 
-![Image-absolute](imgs/wp-updater.png)
+![Image-absolute](pydata-presentation/imgs/wp-updater.png)
 
 @fa[arrow-down]
 
@@ -494,7 +494,7 @@ https://roscon.ros.org/2015/presentations/ROSCon-Automated-Driving.pdf
     - calculate/publish /twist_cmd to follow waypoints and speeds
 - DBW node
 
-![Image-absolute](imgs/dbw-node.png)
+![Image-absolute](pydata-presentation/imgs/dbw-node.png)
 
 @fa[arrow-down]
 
@@ -538,7 +538,7 @@ https://roscon.ros.org/2015/presentations/ROSCon-Automated-Driving.pdf
 
 ### ROS Rviz
 
-![Image-absolute](imgs/rviz-rosbag-play.gif)
+![Image-absolute](pydata-presentation/imgs/rviz-rosbag-play.gif)
 
 @fa[arrow-down]
 
@@ -548,7 +548,7 @@ https://roscon.ros.org/2015/presentations/ROSCon-Automated-Driving.pdf
 
 ### ROS RQT
 
-![Image-absolute](imgs/rqt.png)
+![Image-absolute](pydata-presentation/imgs/rqt.png)
 
 
 @fa[arrow-down]
@@ -566,7 +566,7 @@ https://roscon.ros.org/2015/presentations/ROSCon-Automated-Driving.pdf
 @fa[arrow-down]
 
 
-+++?image=imgs/kairos-diagnostics.png
++++?image=pydata-presentation/imgs/kairos-diagnostics.png
 
 +++?code=ros/src/waypoint_updater/show_waypoints.py&lang=python&title=show_waypoints.py: Diagnostics Tool
 @[13-15](using PyQt5)
