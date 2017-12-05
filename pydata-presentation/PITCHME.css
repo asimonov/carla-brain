@@ -1,0 +1,21 @@
+/* remove image borders */
+.reveal section img {
+  border: 0;
+  box-shadow: none;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* max inline image dimensions */
+.reveal section img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+
+/*********************************************
+ * DECK-SPECIFIC
+ *********************************************/
+ul {
+  font-size: 0.7em;
+}
