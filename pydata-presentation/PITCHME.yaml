@@ -1,0 +1,6 @@
+theme-override : pydata-presentation/PITCHME.css
+
+background: pydata-presentation/imgs/carla-transparent2.jpg
+background-size: cover
+
+#published: true
